@@ -27,7 +27,7 @@ export function SignInForm() {
     },
   });
 
-  const signUp = api.auth.signUp.useMutation({
+  const signUp = api.auth.signIn.useMutation({
     onError: (error) => {
       toast("Error!", {
         description: error.message,
