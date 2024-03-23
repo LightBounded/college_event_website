@@ -1,8 +1,8 @@
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
-import { Toaster } from "sonner";
 
+import { Toaster } from "~/components/ui/sonner";
 import { ThemeProvider } from "~/components/ui/theme-provider";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
 import { TRPCReactProvider } from "~/trpc/react";
