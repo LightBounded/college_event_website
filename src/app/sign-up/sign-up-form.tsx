@@ -28,9 +28,15 @@ export function SignUpForm() {
   });
 
   const signUp = api.auth.signUp.useMutation({
-    onError: () => {
+    onError: (error) => {
       toast("Error!", {
-        description: "An error occurred while signing up",
+        description: error.message,
+      });
+    },
+    onSuccess: () => {
+      router.push("/");
+      toast("Success!", {
+        description: "You have successfully signed up",
       });
     },
   });
@@ -40,7 +46,6 @@ export function SignUpForm() {
       <form
         onSubmit={form.handleSubmit(async (values) => {
           signUp.mutate(values);
-          router.push("/");
         })}
         className="flex w-full flex-col gap-4"
       >

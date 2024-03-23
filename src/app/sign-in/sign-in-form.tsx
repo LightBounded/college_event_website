@@ -28,9 +28,15 @@ export function SignInForm() {
   });
 
   const signUp = api.auth.signUp.useMutation({
-    onError: () => {
+    onError: (error) => {
       toast("Error!", {
-        description: "An error occurred while signing in",
+        description: error.message,
+      });
+    },
+    onSuccess: () => {
+      router.push("/");
+      toast("Success!", {
+        description: "You have successfully signed in",
       });
     },
   });

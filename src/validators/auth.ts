@@ -9,7 +9,7 @@ export const SignUpSchema = z.object({
     .refine((email) => {
       const domain = email.split("@")[1]!; // Email must have a domain
       return SUPPORTED_SCHOOL_DOMAINS.includes(domain);
-    }),
+    }, "Unsupported email domain"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
