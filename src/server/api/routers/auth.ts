@@ -2,7 +2,11 @@ import { cookies } from "next/headers";
 import { TRPCError } from "@trpc/server";
 import { generateId, Scrypt } from "lucia";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { lucia } from "~/server/auth";
 import { users } from "~/server/db/schema";
 import { SignInSchema, SignUpSchema } from "~/validators/auth";
@@ -73,4 +77,7 @@ export const authRouter = createTRPCRouter({
         sessionCookie.attributes,
       );
     }),
+  signOut: protectedProcedure.mutation(async ({ ctx }) => {
+    await lucia.invalidateUserSessions(ctx.user.id);
+  }),
 });
