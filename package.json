@@ -10,6 +10,9 @@
     "db:dev": "turso dev --db-file db.sqlite -p 3001",
     "dev": "next dev",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "start": "next start"
   },
   "dependencies": {
