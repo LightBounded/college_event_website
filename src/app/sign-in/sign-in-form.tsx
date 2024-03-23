@@ -46,7 +46,6 @@ export function SignInForm() {
       <form
         onSubmit={form.handleSubmit(async (values) => {
           signUp.mutate(values);
-          router.push("/");
         })}
         className="flex w-full flex-col gap-4"
       >
