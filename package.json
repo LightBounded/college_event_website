@@ -7,11 +7,13 @@
     "build": "next build",
     "db:push": "drizzle-kit push:sqlite",
     "db:studio": "drizzle-kit studio",
+    "db:dev": "turso dev --db-file db.sqlite -p 3001",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
+    "@libsql/client": "^0.5.6",
     "@t3-oss/env-nextjs": "^0.9.2",
     "@tanstack/react-query": "^5.25.0",
     "@trpc/client": "next",
