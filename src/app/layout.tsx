@@ -2,6 +2,8 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 
+import { ThemeProvider } from "~/components/ui/theme-provider";
+import { ThemeToggle } from "~/components/ui/theme-toggle";
 import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({
@@ -23,7 +25,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TRPCReactProvider>
+            {children}
+            <div className="fixed bottom-4 right-4">
+              <ThemeToggle />
+            </div>
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
