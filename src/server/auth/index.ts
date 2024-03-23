@@ -27,4 +27,3 @@ declare module "lucia" {
     DatabaseUserAttributes: Omit<User, "hashedPassword">;
   }
 }
-
