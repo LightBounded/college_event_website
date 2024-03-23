@@ -53,7 +53,7 @@ export const authRouter = createTRPCRouter({
       if (!user) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "User not found",
+          message: "Invalid credentials",
         });
       }
 
@@ -65,7 +65,7 @@ export const authRouter = createTRPCRouter({
       if (!isValidPassword) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Invalid password",
+          message: "Invalid credentials",
         });
       }
 
