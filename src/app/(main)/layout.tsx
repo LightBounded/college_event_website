@@ -31,10 +31,10 @@ async function Navigation() {
       </Link>
       <ul className="flex gap-4">
         <li>
-          <Link href="/sign-in">Events</Link>
+          <Link href="/events">Events</Link>
         </li>
         <li>
-          <Link href="/sign-in">Organization</Link>
+          <Link href="/organizations">Organizations</Link>
         </li>
       </ul>
       <div>{authButton}</div>
