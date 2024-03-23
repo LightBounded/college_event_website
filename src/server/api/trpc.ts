@@ -7,12 +7,12 @@
  * need to use are documented accordingly near the end.
  */
 
-import { uncachedValidateRequest } from "../auth/validate-request";
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
+import { uncachedValidateRequest } from "../auth/validate-request";
 
 /**
  * 1. CONTEXT

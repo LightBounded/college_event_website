@@ -1,6 +1,6 @@
-import { TRPCError } from "@trpc/server";
-import { Scrypt, generateId } from "lucia";
 import { cookies } from "next/headers";
+import { TRPCError } from "@trpc/server";
+import { generateId, Scrypt } from "lucia";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { lucia } from "~/server/auth";
