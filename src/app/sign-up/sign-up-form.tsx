@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -26,7 +27,13 @@ export function SignUpForm() {
     },
   });
 
-  const signUp = api.auth.signUp.useMutation();
+  const signUp = api.auth.signUp.useMutation({
+    onError: () => {
+      toast("Error!", {
+        description: "An error occurred while signing up",
+      });
+    },
+  });
 
   return (
     <Form {...form}>
