@@ -73,7 +73,7 @@ export const location = sqliteTable("location", {
 export const organizations = sqliteTable("organization", {
   id: text("id").notNull().primaryKey(),
   name: text("name").notNull(),
-  ownerId: text("owner_id")
+  adminId: text("admin_id")
     .notNull()
     .references(() => users.id),
   description: text("description"),
