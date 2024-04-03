@@ -76,6 +76,9 @@ export const organizations = sqliteTable("organization", {
   adminId: text("admin_id")
     .notNull()
     .references(() => users.id),
+  universityId: text("university_id")
+    .notNull()
+    .references(() => universities.id),
   description: text("description"),
   membersCount: int("members_count").notNull().default(0),
 });
