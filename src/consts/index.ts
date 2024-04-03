@@ -10,3 +10,16 @@ export const SUPPORTED_SCHOOL_DOMAINS = [
   "fgcu.edu",
   "fau.edu",
 ];
+
+export const SCHOOLS = [
+  { value: "ucf", label: "UCF" },
+  { value: "uf", label: "UF" },
+  { value: "fsu", label: "FSU" },
+  { value: "usf", label: "USF" },
+  { value: "fiu", label: "FIU" },
+  { value: "famu", label: "FAMU" },
+  { value: "unf", label: "UNF" },
+  { value: "uwf", label: "UWF" },
+  { value: "fgcu", label: "FGCU" },
+  { value: "fau", label: "FAU" },
+];
