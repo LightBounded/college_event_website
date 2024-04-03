@@ -44,6 +44,9 @@ export const universities = sqliteTable("university", {
   name: text("name").notNull(),
   description: text("description"),
   studentsCount: int("students_count").notNull().default(0),
+  locationId: text("location_id")
+    .notNull()
+    .references(() => location.id),
 });
 
 export const location = sqliteTable("location", {
