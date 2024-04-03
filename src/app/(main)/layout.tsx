@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
 import { validateRequest } from "~/server/auth/validate-request";
-import { Combobox } from "./combobox";
+import { Combobox } from "./components/combobox";
+import { SignOutButton } from "./sign-out-button";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

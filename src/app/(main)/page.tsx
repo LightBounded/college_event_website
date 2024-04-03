@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import Eventfilter from "./event-filter";
-import Events from "./events";
-import Orgfilter from "./org-filter";
-import Organizations from "./organizations";
+import Eventfilter from "./components/event-filter";
+import Events from "./components/events";
+import Orgfilter from "./components/org-filter";
+import Organizations from "./components/organizations";
 
 export default async function Home() {
   return (
