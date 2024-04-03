@@ -24,7 +24,7 @@ async function Navigation() {
           href="/"
           className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent"
         >
-          LeCollege<span className="text-black">Events</span>
+          LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
         <Combobox />
       </div>
