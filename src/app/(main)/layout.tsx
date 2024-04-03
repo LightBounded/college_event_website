@@ -28,11 +28,15 @@ async function Navigation() {
 
   return (
     <nav className="flex h-16 items-center justify-between gap-4 px-4">
-      <Link href="/" className="flex flex-row text-xl font-semibold">
-        LeCollege Events
-        <Image src="/lebron.png" alt="LeCollege Logo" width={36} height={32} />
-      </Link>
-      <Combobox />
+      <div className="flex flex-row gap-4 text-xl font-semibold">
+        <Link
+          href="/"
+          className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent"
+        >
+          LeCollege<span className="text-black">Events</span>
+        </Link>
+        <Combobox />
+      </div>
       <div>{authButton}</div>
     </nav>
   );
