@@ -10,10 +10,11 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
+import { organizations, universities } from "../db/schema";
 
 /**
  * 1. CONTEXT
@@ -110,3 +111,67 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     },
   });
 });
+
+export const universityAdminProcedure = protectedProcedure
+  .input(
+    z.object({
+      universityId: z.string(),
+    }),
+  )
+  .use(async ({ ctx, next, input }) => {
+    const university = await db.query.universities.findFirst({
+      where: eq(universities.adminId, ctx.user.id),
+    });
+
+    if (!university) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not an admin for a university",
+      });
+    }
+
+    if (university.id !== input.universityId) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not allowed to manage this university",
+      });
+    }
+
+    return next({
+      ctx: {
+        university,
+      },
+    });
+  });
+
+export const organizationAdminProcedure = protectedProcedure
+  .input(
+    z.object({
+      organizationId: z.string(),
+    }),
+  )
+  .use(async ({ ctx, next, input }) => {
+    const organization = await db.query.organizations.findFirst({
+      where: eq(organizations.adminId, ctx.user.id),
+    });
+
+    if (!organization) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not an admin for an organization",
+      });
+    }
+
+    if (organization.id !== input.organizationId) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not allowed to manage this organization",
+      });
+    }
+
+    return next({
+      ctx: {
+        organization,
+      },
+    });
+  });
