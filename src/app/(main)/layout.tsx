@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
 import { validateRequest } from "~/server/auth/validate-request";
+import { Combobox } from "./combobox";
 import { SignOutButton } from "./sign-out-button";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -26,17 +28,11 @@ async function Navigation() {
 
   return (
     <nav className="flex h-16 items-center justify-between gap-4 px-4">
-      <Link href="/" className="text-xl font-semibold">
-        Varsity Vibes
+      <Link href="/" className="flex flex-row text-xl font-semibold">
+        LeCollege Events
+        <Image src="/lebron.png" alt="LeCollege Logo" width={36} height={32} />
       </Link>
-      <ul className="flex gap-4">
-        <li>
-          <Link href="/events">Events</Link>
-        </li>
-        <li>
-          <Link href="/organizations">Organizations</Link>
-        </li>
-      </ul>
+      <Combobox />
       <div>{authButton}</div>
     </nav>
   );
