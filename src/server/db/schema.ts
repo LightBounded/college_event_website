@@ -88,6 +88,8 @@ export const events = sqliteTable("event", {
     .references(() => location.id),
   time: text("time").notNull(),
   date: text("date").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  contactPhone: text("contact_phone").notNull(),
   membersCount: int("members_count").notNull().default(0),
 });
 
