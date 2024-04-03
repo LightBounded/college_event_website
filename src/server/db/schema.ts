@@ -1,8 +1,10 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 
 // export const posts = sqliteTable(
 //   "post",
@@ -25,6 +27,13 @@ export const users = sqliteTable("user", {
   hashedPassword: text("hashed_password").notNull(),
 });
 
+export const usersRelations = relations(users, ({ many }) => {
+  return {
+    organizations: many(organizations),
+    universities: many(universities),
+  };
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 
@@ -42,6 +51,11 @@ export const universities = sqliteTable("university", {
     .notNull()
     .references(() => users.id),
   name: text("name").notNull(),
+  domain: text("domain", {
+    enum: SUPPORTED_SCHOOL_DOMAINS,
+  })
+    .notNull()
+    .unique(),
   description: text("description"),
   studentsCount: int("students_count").notNull().default(0),
   locationId: text("location_id")
