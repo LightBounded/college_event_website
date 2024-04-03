@@ -9,7 +9,7 @@ export default async function SignIn() {
   if (user) redirect("/");
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-80 flex-col items-center justify-center">
+    <div className="mx-auto flex min-h-screen flex-col items-center justify-center px-8">
       <SignInForm />
     </div>
   );

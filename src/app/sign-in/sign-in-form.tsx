@@ -1,94 +1,66 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { useFormState } from "react-dom";
 
 import { Button } from "~/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-} from "~/components/ui/form";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
-import { api } from "~/trpc/react";
-import { SignInSchema } from "~/validators/auth";
+import { signInAction } from "~/lib/actions";
 
 export function SignInForm() {
-  const router = useRouter();
-  const form = useForm({
-    schema: SignInSchema,
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const signUp = api.auth.signIn.useMutation({
-    onError: (error) => {
-      toast("Error!", {
-        description: error.message,
-      });
-    },
-    onSuccess: () => {
-      router.push("/");
-      toast("Success!", {
-        description: "You have successfully signed in",
-      });
-    },
-  });
+  const [state, formAction] = useFormState(signInAction, null);
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(async (values) => {
-          signUp.mutate(values);
-        })}
-        className="flex w-full flex-col gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>School Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="School Email"
-                  autoComplete="email"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="Password" type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button>Sign In</Button>
-      </form>
-      <FormDescription className="mt-2">
-        Don&apos;t have an account?{" "}
-        <Link href="/sign-up" className="text-black underline">
-          Sign Up
-        </Link>
-      </FormDescription>
-    </Form>
+    <Card className="w-full max-w-sm">
+      <CardHeader className="text-center">
+        <CardTitle>LeCollegeEvents Sign In</CardTitle>
+        <CardDescription>
+          Sign in using your school email and password
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={formAction} className="flex flex-col gap-2">
+          <div className="space-y-1">
+            <Label>Email</Label>
+            <Input name="email" placeholder="Email" autoComplete="email" />
+            {state?.fieldError?.email && (
+              <p className="text-sm text-red-500">{state.fieldError.email}</p>
+            )}
+          </div>
+          <div className="space-y-1">
+            <Label>Password</Label>
+            <Input
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Password"
+            />
+            {state?.fieldError?.password && (
+              <p className="text-sm text-red-500">
+                {state.fieldError.password}
+              </p>
+            )}
+          </div>
+          <Button className="mt-2" type="submit">
+            Submit
+          </Button>
+          <p className="font-regular mt-2 text-center text-sm">
+            Don&apos;t have an account?
+            <Link href="/sign-up" className="font-semibold">
+              {" "}
+              Sign In
+            </Link>
+          </p>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
