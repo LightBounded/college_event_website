@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -7,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -81,6 +83,12 @@ export function SignInForm() {
         />
         <Button>Sign In</Button>
       </form>
+      <FormDescription className="mt-2">
+        Don&apos;t have an account?{" "}
+        <Link href="/sign-up" className="text-black underline">
+          Sign Up
+        </Link>
+      </FormDescription>
     </Form>
   );
 }
