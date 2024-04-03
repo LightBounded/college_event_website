@@ -1,10 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
+import { signOutAction } from "~/lib/actions";
 import { validateRequest } from "~/server/auth/validate-request";
 import { Combobox } from "./combobox";
-import { SignOutButton } from "./sign-out-button";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,14 +17,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 async function Navigation() {
   const { user } = await validateRequest();
 
-  const authButton = user ? (
-    <SignOutButton />
-  ) : (
-    <Button asChild>
-      <Link href="/sign-in">Sign In</Link>
-    </Button>
-  );
-
   return (
     <nav className="flex h-16 items-center justify-between gap-4 px-4">
       <div className="flex flex-row gap-4 text-xl font-semibold">
@@ -37,7 +28,17 @@ async function Navigation() {
         </Link>
         <Combobox />
       </div>
-      <div>{authButton}</div>
+      {user ? (
+        <form action={signOutAction}>
+          <Button size="sm" type="submit">
+            Sign Out
+          </Button>
+        </form>
+      ) : (
+        <Link href="/sign-in">
+          <Button size="sm">Sign In</Button>
+        </Link>
+      )}
     </nav>
   );
 }
