@@ -4,7 +4,7 @@ import Eventsearch from "./event-search";
 
 export default async function Eventfilter() {
   return (
-    <RadioGroup defaultValue="option-one" className="flex flex-col">
+    <RadioGroup className="flex flex-col">
       <div className="mb-4 flex items-center space-x-2">
         <Eventsearch />
       </div>
