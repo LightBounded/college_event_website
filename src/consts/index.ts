@@ -9,7 +9,7 @@ export const SUPPORTED_SCHOOL_DOMAINS = [
   "uwf.edu",
   "fgcu.edu",
   "fau.edu",
-];
+] as const;
 
 export const SCHOOLS = [
   { value: "ucf", label: "UCF" },
@@ -22,4 +22,4 @@ export const SCHOOLS = [
   { value: "uwf", label: "UWF" },
   { value: "fgcu", label: "FGCU" },
   { value: "fau", label: "FAU" },
-];
+] as const;
