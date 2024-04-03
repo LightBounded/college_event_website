@@ -16,7 +16,7 @@ export default function Eventsearch() {
   const [showCommandList, setShowCommandList] = useState(false);
 
   return (
-    <Command className="rounded-lg border shadow-md">
+    <Command className="w-[250px] rounded-lg border shadow-md">
       <CommandInput
         placeholder="Search for an event..."
         onFocus={() => setShowCommandList(true)}
