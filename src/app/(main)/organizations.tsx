@@ -11,7 +11,7 @@ export default async function Organizations() {
   return (
     <>
       {organizations.map((organization) => (
-        <Card key={organization.name}>
+        <Card key={organization.name} className="w-[845px]">
           <CardHeader>
             <CardTitle>{organization.name}</CardTitle>
             <CardDescription>{organization.description}</CardDescription>
@@ -25,22 +25,27 @@ export default async function Organizations() {
 const organizations = [
   {
     name: "Club Name 1",
-    description: "Club Description 1",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     name: "Club Name 2",
-    description: "Club Description 2",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     name: "Club Name 3",
-    description: "Club Description 3",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     name: "Club Name 4",
-    description: "Club Description 4",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
     name: "Club Name 5",
-    description: "Club Description 5",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];

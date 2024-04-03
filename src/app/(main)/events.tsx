@@ -11,7 +11,7 @@ export default async function Events() {
   return (
     <>
       {events.map((organization) => (
-        <Card key={organization.name}>
+        <Card key={organization.name} className="w-[845px]">
           <CardHeader>
             <CardTitle>{organization.name}</CardTitle>
             <CardDescription>{organization.description}</CardDescription>
