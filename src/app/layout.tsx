@@ -15,7 +15,7 @@ const inter = Inter({
 export const metadata = {
   title: "LeCollege Events",
   description: "Event website for LeCollege Students",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/lebron.png" }],
 };
 
 export default function RootLayout({
