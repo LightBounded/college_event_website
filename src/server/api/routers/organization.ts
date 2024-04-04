@@ -2,7 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
-import { SCHOOLS } from "~/consts";
 import {
   members,
   organizations,
