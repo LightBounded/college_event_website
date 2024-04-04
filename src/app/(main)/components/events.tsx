@@ -9,7 +9,10 @@ export default async function Events() {
   return (
     <>
       {events.map((event) => (
-        <Card key={event.name} className="w-[300px] lg:w-[600px]">
+        <Card
+          key={event.name}
+          className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
+        >
           <CardHeader>
             <CardTitle>{event.name}</CardTitle>
             <CardDescription>{event.description}</CardDescription>

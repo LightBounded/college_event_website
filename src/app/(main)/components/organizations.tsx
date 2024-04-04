@@ -11,7 +11,10 @@ export default async function Organizations() {
   return (
     <>
       {organizations.map((organization) => (
-        <Card key={organization.name} className="w-[300px] lg:w-[600px]">
+        <Card
+          key={organization.name}
+          className="w-[300px] transition-transform hover:scale-x-105 lg:w-[600px]"
+        >
           <Link href={"/" + organization.id}>
             <CardHeader>
               <CardTitle>{organization.name}</CardTitle>
