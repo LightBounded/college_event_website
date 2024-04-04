@@ -1,7 +1,22 @@
-export default function page({
+import { api } from "~/trpc/server";
+
+export default async function page({
   params,
 }: {
   params: { organizationId: string };
 }) {
-  return <div>This is organization of id {params.organizationId}</div>;
+  const organization = await api.organization.byId({
+    organizationId: Number(params.organizationId),
+  });
+
+  return (
+    <main className="flex min-h-screen flex-row justify-center p-4">
+      <div className="flex flex-col gap-4 sm:w-[400px]">
+        <h1 className="bg-gradient-to-r from-violet-600 to-indigo-100 bg-clip-text text-4xl font-semibold text-transparent">
+          {organization?.name}
+        </h1>
+        <h2>{organization?.description}</h2>
+      </div>
+    </main>
+  );
 }
