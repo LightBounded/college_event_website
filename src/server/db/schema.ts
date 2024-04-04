@@ -65,6 +65,15 @@ export const universities = sqliteTable("university", {
     .references(() => location.id),
 });
 
+export const universitiesRelations = relations(universities, ({ one }) => {
+  return {
+    admin: one(users, {
+      fields: [universities.adminId],
+      references: [users.id],
+    }),
+  };
+});
+
 export const location = sqliteTable("location", {
   id: int("id").notNull().primaryKey({
     autoIncrement: true,
@@ -89,6 +98,19 @@ export const organizations = sqliteTable("organization", {
   membersCount: int("members_count").notNull().default(0),
 });
 
+export const organizationsRelations = relations(organizations, ({ one }) => {
+  return {
+    admin: one(users, {
+      fields: [organizations.adminId],
+      references: [users.id],
+    }),
+    university: one(universities, {
+      fields: [organizations.universityId],
+      references: [universities.id],
+    }),
+  };
+});
+
 export const members = sqliteTable("member", {
   id: int("id").notNull().primaryKey({
     autoIncrement: true,
@@ -103,8 +125,14 @@ export const members = sqliteTable("member", {
 
 export const membersRelations = relations(members, ({ one }) => {
   return {
-    user: one(users),
-    organization: one(organizations),
+    user: one(users, {
+      fields: [members.userId],
+      references: [users.id],
+    }),
+    organization: one(organizations, {
+      fields: [members.organizationId],
+      references: [organizations.id],
+    }),
   };
 });
 
