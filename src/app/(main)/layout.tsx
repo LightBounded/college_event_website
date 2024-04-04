@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
 import { validateRequest } from "~/server/auth/validate-request";
-import { Combobox } from "./components/combobox";
+import { Schools } from "./components/schools";
 import { SignOutButton } from "./sign-out-button";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -27,7 +27,7 @@ async function Navigation() {
         >
           LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
-        <Combobox />
+        <Schools />
       </div>
       {user ? (
         <form action={signOutAction}>
