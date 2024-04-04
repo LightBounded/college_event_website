@@ -4,6 +4,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { comment } from "./routers/comment";
+import { event } from "./routers/event";
 import { organization } from "./routers/organization";
 
 /**
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   hello: publicProcedure.query(() => "Hello, World!"),
   organization,
   comment,
+  event,
 });
 
 // export type definition of API
