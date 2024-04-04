@@ -33,7 +33,7 @@ async function Navigation() {
         <form action={signOutAction}>
           <Button
             size="sm"
-            className="transition-all hover:scale-105 hover:bg-foreground"
+            className="transition-all hover:scale-105 hover:bg-foreground hover:text-secondary"
             type="submit"
           >
             Sign Out
@@ -43,7 +43,7 @@ async function Navigation() {
         <Link href="/sign-in">
           <Button
             size="sm"
-            className="transition-all hover:scale-105 hover:bg-foreground"
+            className="transition-all hover:scale-105 hover:bg-foreground hover:text-secondary"
           >
             Sign In
           </Button>
