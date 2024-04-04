@@ -46,7 +46,9 @@ export const sessions = sqliteTable("session", {
 });
 
 export const universities = sqliteTable("university", {
-  id: text("id").notNull().primaryKey(),
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
   adminId: text("admin_id")
     .notNull()
     .references(() => users.id),
@@ -58,37 +60,43 @@ export const universities = sqliteTable("university", {
     .unique(),
   description: text("description"),
   studentsCount: int("students_count").notNull().default(0),
-  locationId: text("location_id")
+  locationId: int("location_id")
     .notNull()
     .references(() => location.id),
 });
 
 export const location = sqliteTable("location", {
-  id: text("id").notNull().primaryKey(),
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
   name: text("name").notNull(),
   longtitude: int("longtitude").notNull(),
   latitude: int("latitude").notNull(),
 });
 
 export const organizations = sqliteTable("organization", {
-  id: text("id").notNull().primaryKey(),
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
   name: text("name").notNull(),
   adminId: text("admin_id")
     .notNull()
     .references(() => users.id),
-  universityId: text("university_id")
+  universityId: int("university_id")
     .notNull()
     .references(() => universities.id),
-  description: text("description"),
+  description: text("description").notNull(),
   membersCount: int("members_count").notNull().default(0),
 });
 
 export const members = sqliteTable("member", {
-  id: text("id").notNull().primaryKey(),
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
   userId: text("user_id")
     .notNull()
     .references(() => users.id),
-  organizationId: text("organization_id")
+  organizationId: int("organization_id")
     .notNull()
     .references(() => organizations.id),
 });
@@ -101,13 +109,15 @@ export const membersRelations = relations(members, ({ one }) => {
 });
 
 export const events = sqliteTable("event", {
-  id: text("id").notNull().primaryKey(),
-  organizationId: text("organization_id")
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
+  organizationId: int("organization_id")
     .notNull()
     .references(() => organizations.id),
   name: text("name").notNull(),
   description: text("description"),
-  locationId: text("location_id")
+  locationId: int("location_id")
     .notNull()
     .references(() => location.id),
   time: text("time").notNull(),
@@ -118,8 +128,10 @@ export const events = sqliteTable("event", {
 });
 
 export const comments = sqliteTable("comment", {
-  id: text("id").notNull().primaryKey(),
-  eventId: text("event_id")
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
+  eventId: int("event_id")
     .notNull()
     .references(() => events.id),
   userId: text("user_id")
@@ -132,8 +144,10 @@ export const comments = sqliteTable("comment", {
 });
 
 export const ratings = sqliteTable("rating", {
-  id: text("id").notNull().primaryKey(),
-  eventId: text("event_id")
+  id: int("id").notNull().primaryKey({
+    autoIncrement: true,
+  }),
+  eventId: int("event_id")
     .notNull()
     .references(() => events.id),
   userId: text("user_id")

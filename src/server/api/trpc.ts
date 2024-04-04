@@ -117,7 +117,7 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 export const universityProcedure = protectedProcedure
   .input(
     z.object({
-      universityId: z.string(),
+      universityId: z.number(),
     }),
   )
   .use(async ({ ctx, next, input }) => {
@@ -161,7 +161,7 @@ export const universityAdminProcedure = universityProcedure.use(
 export const organizationProcedure = protectedProcedure
   .input(
     z.object({
-      organizationId: z.string(),
+      organizationId: z.number(),
     }),
   )
   .use(async ({ ctx, next, input }) => {
