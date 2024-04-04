@@ -31,13 +31,22 @@ async function Navigation() {
       </div>
       {user ? (
         <form action={signOutAction}>
-          <Button size="sm" type="submit">
+          <Button
+            size="sm"
+            className="transition-all hover:scale-105 hover:bg-foreground"
+            type="submit"
+          >
             Sign Out
           </Button>
         </form>
       ) : (
         <Link href="/sign-in">
-          <Button size="sm">Sign In</Button>
+          <Button
+            size="sm"
+            className="transition-all hover:scale-105 hover:bg-foreground"
+          >
+            Sign In
+          </Button>
         </Link>
       )}
     </nav>
