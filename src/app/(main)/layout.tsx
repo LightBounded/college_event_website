@@ -23,7 +23,7 @@ async function Navigation() {
       <div className="flex flex-row gap-4 text-xl font-semibold">
         <Link
           href="/"
-          className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent"
+          className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent transition-all hover:scale-105 hover:text-foreground"
         >
           LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
