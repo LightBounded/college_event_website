@@ -2,7 +2,13 @@ import { TRPCError } from "@trpc/server";
 import { eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
-import { members, organizations, users } from "~/server/db/schema";
+import { SCHOOLS } from "~/consts";
+import {
+  members,
+  organizations,
+  universities,
+  users,
+} from "~/server/db/schema";
 import {
   CreateOrganizationSchema,
   UpdateOrganizationSchema,
@@ -15,15 +21,26 @@ import {
 } from "../trpc";
 
 export const organization = createTRPCRouter({
-  allByUniversityId: publicProcedure
+  allByUniversityName: publicProcedure
     .input(
       z.object({
-        universityId: z.number(),
+        universityName: z.string(),
       }),
     )
     .query(async ({ input, ctx }) => {
+      const university = await ctx.db.query.universities.findFirst({
+        where: eq(universities.name, input.universityName),
+      });
+
+      if (!university) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "University not found",
+        });
+      }
+
       return ctx.db.query.organizations.findMany({
-        where: eq(organizations.universityId, input.universityId),
+        where: eq(organizations.universityId, university.id),
       });
     }),
   create: universityProcedure
