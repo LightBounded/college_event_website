@@ -12,14 +12,14 @@ export const SUPPORTED_SCHOOL_DOMAINS = [
 ] as const;
 
 export const SCHOOLS = [
-  { value: "ucf", label: "UCF" },
-  { value: "uf", label: "UF" },
-  { value: "fsu", label: "FSU" },
-  { value: "usf", label: "USF" },
-  { value: "fiu", label: "FIU" },
-  { value: "famu", label: "FAMU" },
-  { value: "unf", label: "UNF" },
-  { value: "uwf", label: "UWF" },
-  { value: "fgcu", label: "FGCU" },
-  { value: "fau", label: "FAU" },
+  { acronym: "ucf", name: "University of Central Florida" },
+  { acronym: "uf", name: "University of Florida" },
+  { acronym: "fsu", name: "Florida State University" },
+  { acronym: "usf", name: "University of South Florida" },
+  { acronym: "fiu", name: "Florida International University" },
+  { acronym: "famu", name: "Florida A&M University" },
+  { acronym: "unf", name: "University of North Florida" },
+  { acronym: "uwf", name: "University of West Florida" },
+  { acronym: "fgcu", name: "Florida Gulf Coast University" },
+  { acronym: "fau", name: "Florida Atlantic University" },
 ] as const;
