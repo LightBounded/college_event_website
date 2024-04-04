@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 import {
   Card,
@@ -32,10 +33,12 @@ export default function Organizations() {
             key={org.name}
             className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
           >
-            <CardHeader>
-              <CardTitle>{org.name}</CardTitle>
-              <CardDescription>{org.description}</CardDescription>
-            </CardHeader>
+            <Link href={"/" + org.id}>
+              <CardHeader>
+                <CardTitle>{org.name}</CardTitle>
+                <CardDescription>{org.description}</CardDescription>
+              </CardHeader>
+            </Link>
           </Card>
         ))
       ) : (
