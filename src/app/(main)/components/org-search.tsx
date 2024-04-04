@@ -16,7 +16,7 @@ export default function Orgsearch() {
   const [showCommandList, setShowCommandList] = useState(false);
 
   return (
-    <Command className="w-[250px] rounded-lg border shadow-md">
+    <Command className="w-[250px] -space-y-1 rounded-lg border">
       <CommandInput
         placeholder="Search for an organization..."
         onFocus={() => setShowCommandList(true)}
