@@ -8,11 +8,11 @@ import {
 export default async function Events() {
   return (
     <>
-      {events.map((organization) => (
-        <Card key={organization.name} className="w-[300px] lg:w-[600px]">
+      {events.map((event) => (
+        <Card key={event.name} className="w-[300px] lg:w-[600px]">
           <CardHeader>
-            <CardTitle>{organization.name}</CardTitle>
-            <CardDescription>{organization.description}</CardDescription>
+            <CardTitle>{event.name}</CardTitle>
+            <CardDescription>{event.description}</CardDescription>
           </CardHeader>
         </Card>
       ))}
