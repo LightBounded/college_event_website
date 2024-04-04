@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Card,
   CardDescription,
@@ -10,10 +12,12 @@ export default async function Organizations() {
     <>
       {organizations.map((organization) => (
         <Card key={organization.name} className="w-[300px] lg:w-[600px]">
-          <CardHeader>
-            <CardTitle>{organization.name}</CardTitle>
-            <CardDescription>{organization.description}</CardDescription>
-          </CardHeader>
+          <Link href={"/" + organization.id}>
+            <CardHeader>
+              <CardTitle>{organization.name}</CardTitle>
+              <CardDescription>{organization.description}</CardDescription>
+            </CardHeader>
+          </Link>
         </Card>
       ))}
     </>
