@@ -4,7 +4,6 @@ import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
 import { validateRequest } from "~/server/auth/validate-request";
 import { Schools } from "./components/schools";
-import { SignOutButton } from "./sign-out-button";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
