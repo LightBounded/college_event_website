@@ -74,4 +74,15 @@ export const organization = createTRPCRouter({
         .delete(organizations)
         .where(eq(organizations.id, input.organizationId));
     }),
+  byId: publicProcedure
+    .input(
+      z.object({
+        organizationId: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.query.organizations.findFirst({
+        where: eq(organizations.id, input.organizationId),
+      });
+    }),
 });
