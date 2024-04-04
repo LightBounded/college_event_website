@@ -93,6 +93,13 @@ export const members = sqliteTable("member", {
     .references(() => organizations.id),
 });
 
+export const membersRelations = relations(members, ({ one }) => {
+  return {
+    user: one(users),
+    organization: one(organizations),
+  };
+});
+
 export const events = sqliteTable("event", {
   id: text("id").notNull().primaryKey(),
   organizationId: text("organization_id")
