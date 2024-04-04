@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations, sql } from "drizzle-orm";
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 
@@ -21,16 +21,30 @@ import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 //   }),
 // );
 
-export const users = sqliteTable("user", {
-  id: text("id").notNull().primaryKey(),
-  email: text("email").notNull().unique(),
-  hashedPassword: text("hashed_password").notNull(),
-});
+export const users = sqliteTable(
+  "user",
+  {
+    id: text("id").notNull().primaryKey(),
+    email: text("email").notNull().unique(),
+    hashedPassword: text("hashed_password").notNull(),
+  },
+  (users) => ({
+    emailIndex: index("email_idx").on(users.email),
+  }),
+);
 
-export const usersRelations = relations(users, ({ many }) => {
+export const usersRelations = relations(users, ({ many, one }) => {
   return {
     organizations: many(organizations),
     universities: many(universities),
+    administeredUniversity: one(universities, {
+      fields: [users.id],
+      references: [universities.adminId],
+    }),
+    administeredOrganization: one(organizations, {
+      fields: [users.id],
+      references: [organizations.adminId],
+    }),
   };
 });
 
