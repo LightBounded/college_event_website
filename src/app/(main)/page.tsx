@@ -12,17 +12,24 @@ export default async function Home() {
           <TabsTrigger value="organizations">Organizations</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
         </TabsList>
-        <TabsContent value="organizations" className="flex flex-row gap-4">
+        <TabsContent
+          value="organizations"
+          className="flex flex-col gap-4 sm:flex-row"
+        >
+          <div className="flex flex-col gap-4">
+            <Orgfilter />
+          </div>
           <div className="flex flex-col gap-4">
             <Organizations />
           </div>
-          <Orgfilter />
         </TabsContent>
-        <TabsContent value="events" className="flex flex-row gap-4">
+        <TabsContent value="events" className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex flex-col gap-4">
+            <Eventfilter />
+          </div>
           <div className="flex flex-col gap-4">
             <Events />
           </div>
-          <Eventfilter />
         </TabsContent>
       </Tabs>
     </main>
