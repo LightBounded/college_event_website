@@ -3,6 +3,7 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "~/server/api/trpc";
+import { organization } from "./routers/organization";
 
 /**
  * This is the primary router for your server.
@@ -11,6 +12,7 @@ import {
  */
 export const appRouter = createTRPCRouter({
   hello: publicProcedure.query(() => "Hello, World!"),
+  organization,
 });
 
 // export type definition of API
