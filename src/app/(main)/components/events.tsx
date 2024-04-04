@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import {
   Card,
   CardDescription,
@@ -5,20 +9,38 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-export default async function Events() {
+export default function Events() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredEvents = events.filter((event) =>
+    event.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <>
-      {events.map((event) => (
-        <Card
-          key={event.name}
-          className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
-        >
-          <CardHeader>
-            <CardTitle>{event.name}</CardTitle>
-            <CardDescription>{event.description}</CardDescription>
-          </CardHeader>
-        </Card>
-      ))}
+      <input
+        type="text"
+        placeholder="Search events"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="flex h-9 w-1/2 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+      />
+
+      {filteredEvents.length > 0 ? (
+        filteredEvents.map((event) => (
+          <Card
+            key={event.name}
+            className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
+          >
+            <CardHeader>
+              <CardTitle>{event.name}</CardTitle>
+              <CardDescription>{event.description}</CardDescription>
+            </CardHeader>
+          </Card>
+        ))
+      ) : (
+        <div className="w-[300px] lg:w-[600px]">No events found.</div>
+      )}
     </>
   );
 }

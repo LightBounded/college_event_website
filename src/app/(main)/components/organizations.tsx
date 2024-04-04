@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 
 import {
   Card,
@@ -7,22 +9,38 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-export default async function Organizations() {
+export default function Organizations() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredEvents = organizations.filter((org) =>
+    org.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
     <>
-      {organizations.map((organization) => (
-        <Card
-          key={organization.name}
-          className="w-[300px] transition-transform hover:scale-x-105 lg:w-[600px]"
-        >
-          <Link href={"/" + organization.id}>
+      <input
+        type="text"
+        placeholder="Search organizations"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="flex h-9 w-1/2 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+      />
+
+      {filteredEvents.length > 0 ? (
+        filteredEvents.map((org) => (
+          <Card
+            key={org.name}
+            className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
+          >
             <CardHeader>
-              <CardTitle>{organization.name}</CardTitle>
-              <CardDescription>{organization.description}</CardDescription>
+              <CardTitle>{org.name}</CardTitle>
+              <CardDescription>{org.description}</CardDescription>
             </CardHeader>
-          </Link>
-        </Card>
-      ))}
+          </Card>
+        ))
+      ) : (
+        <div className="w-[300px] lg:w-[600px]">No events found.</div>
+      )}
     </>
   );
 }
