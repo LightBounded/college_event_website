@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -6,7 +7,7 @@ import {
   organizationAdminProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { events } from "~/server/db/schema";
+import { events, universities } from "~/server/db/schema";
 import { CreateEventSchema, UpdateEventSchema } from "~/validators/events";
 
 export const event = createTRPCRouter({
@@ -16,6 +17,31 @@ export const event = createTRPCRouter({
       return ctx.db.query.events.findMany({
         where: eq(events.organizationId, input.organizationId),
       });
+    }),
+  allByUniversityName: publicProcedure
+    .input(z.object({ universityName: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const university = await ctx.db.query.universities.findFirst({
+        where: eq(universities.name, input.universityName),
+        with: {
+          organizations: {
+            with: {
+              events: true,
+            },
+          },
+        },
+      });
+
+      if (!university) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "University not found",
+        });
+      }
+
+      return university.organizations.flatMap(
+        (organization) => organization.events,
+      );
     }),
   create: organizationAdminProcedure
     .input(CreateEventSchema)
