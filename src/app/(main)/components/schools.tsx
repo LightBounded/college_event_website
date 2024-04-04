@@ -20,7 +20,7 @@ import {
 import { SCHOOLS } from "~/consts";
 import { cn } from "~/lib/utils";
 
-export function Combobox() {
+export function Schools() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -34,7 +34,7 @@ export function Combobox() {
           className="w-[200px] justify-between"
         >
           {value
-            ? SCHOOLS.find((school) => school.value === value)?.label
+            ? SCHOOLS.find((school) => school.acronym === value)?.name
             : "Select school..."}
           <ChevronUpIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -45,10 +45,10 @@ export function Combobox() {
           <CommandEmpty>No school found.</CommandEmpty>
           <CommandGroup>
             {SCHOOLS.map((school) => (
-              <CommandList key={school.value}>
+              <CommandList key={school.acronym}>
                 <CommandItem
-                  key={school.value}
-                  value={school.value}
+                  key={school.name}
+                  value={school.name}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
@@ -57,10 +57,10 @@ export function Combobox() {
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === school.value ? "opacity-100" : "opacity-0",
+                      value === school.acronym ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {school.label}
+                  {school.name}
                 </CommandItem>
               </CommandList>
             ))}
