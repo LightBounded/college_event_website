@@ -8,13 +8,14 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import superjson from "superjson";
 import { z, ZodError } from "zod";
 
+import { type SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
-import { organizations, universities } from "../db/schema";
+import { members, organizations, universities } from "../db/schema";
 
 /**
  * 1. CONTEXT
@@ -112,28 +113,26 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   });
 });
 
-export const universityAdminProcedure = protectedProcedure
+// User must be part of the university to use this procedure
+export const universityProcedure = protectedProcedure
   .input(
     z.object({
       universityId: z.string(),
     }),
   )
   .use(async ({ ctx, next, input }) => {
+    const universityDomain = ctx.user.email.split(
+      "@",
+    )[1] as (typeof SUPPORTED_SCHOOL_DOMAINS)[number];
+
     const university = await db.query.universities.findFirst({
-      where: eq(universities.adminId, ctx.user.id),
+      where: eq(universities.id, input.universityId),
     });
 
-    if (!university) {
+    if (!university || university.domain !== universityDomain) {
       throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Not an admin for a university",
-      });
-    }
-
-    if (university.id !== input.universityId) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Not allowed to manage this university",
+        code: "NOT_FOUND",
+        message: "University not found",
       });
     }
 
@@ -144,34 +143,61 @@ export const universityAdminProcedure = protectedProcedure
     });
   });
 
-export const organizationAdminProcedure = protectedProcedure
+// User must be an admin of university to use this procedure
+export const universityAdminProcedure = universityProcedure.use(
+  async ({ ctx, next }) => {
+    if (ctx.university.adminId !== ctx.user.id) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not an admin for this university",
+      });
+    }
+
+    return next();
+  },
+);
+
+// User must be part of the organization to use this procedure
+export const organizationProcedure = protectedProcedure
   .input(
     z.object({
       organizationId: z.string(),
     }),
   )
   .use(async ({ ctx, next, input }) => {
-    const organization = await db.query.organizations.findFirst({
-      where: eq(organizations.adminId, ctx.user.id),
+    const membership = await db.query.members.findFirst({
+      where: and(
+        eq(members.userId, ctx.user.id),
+        eq(members.organizationId, input.organizationId),
+      ),
+      with: {
+        organization: true,
+      },
     });
 
-    if (!organization) {
+    if (!membership?.organization) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "Not an admin for an organization",
-      });
-    }
-
-    if (organization.id !== input.organizationId) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Not allowed to manage this organization",
+        message: "Not a member of this organization",
       });
     }
 
     return next({
       ctx: {
-        organization,
+        organization: membership.organization,
       },
     });
   });
+
+export const organizationAdminProcedure = organizationProcedure.use(
+  async ({ ctx, next }) => {
+    if (ctx.organization.adminId !== ctx.user.id) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not an admin for this organization",
+      });
+    }
+
+    return next();
+  },
+);
