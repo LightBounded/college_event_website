@@ -34,7 +34,9 @@ export function Schools() {
           className="w-[200px] justify-between"
         >
           {value
-            ? SCHOOLS.find((school) => school.acronym === value)?.name
+            ? SCHOOLS.find(
+                (school) => school.name === value,
+              )?.acronym.toUpperCase()
             : "Select school..."}
           <ChevronUpIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
