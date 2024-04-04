@@ -20,7 +20,3 @@ export const UpdateEventSchema = z.object({
   contactEmail: z.string(),
   contactPhone: z.string(),
 });
-
-export const DeleteEventSchema = z.object({
-  eventId: z.number(),
-});
