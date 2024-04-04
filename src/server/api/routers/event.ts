@@ -10,9 +10,13 @@ import { events } from "~/server/db/schema";
 import { CreateEventSchema, UpdateEventSchema } from "~/validators/events";
 
 export const event = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.query.events.findMany();
-  }),
+  allByOrganizationId: publicProcedure
+    .input(z.object({ organizationId: z.number() }))
+    .query(async ({ input, ctx }) => {
+      return ctx.db.query.events.findMany({
+        where: eq(events.organizationId, input.organizationId),
+      });
+    }),
   create: organizationAdminProcedure
     .input(CreateEventSchema)
     .mutation(async ({ input, ctx }) => {
