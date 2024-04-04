@@ -15,9 +15,17 @@ import {
 } from "../trpc";
 
 export const organization = createTRPCRouter({
-  all: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.query.organizations.findMany();
-  }),
+  allByUniversityId: publicProcedure
+    .input(
+      z.object({
+        universityId: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.query.organizations.findMany({
+        where: eq(organizations.universityId, input.universityId),
+      });
+    }),
   create: universityProcedure
     .input(CreateOrganizationSchema)
     .mutation(async ({ input: { membersEmails, ...newOrganization }, ctx }) => {

@@ -15,7 +15,7 @@ import { z, ZodError } from "zod";
 import { type SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
-import { members, organizations, universities } from "../db/schema";
+import { members, universities } from "../db/schema";
 
 /**
  * 1. CONTEXT
