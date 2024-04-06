@@ -1,77 +1,19 @@
-"use client";
+import { SCHOOLS } from "~/consts";
+import { validateRequest } from "~/server/auth/validate-request";
+import { api } from "~/trpc/server";
+import { EventsList } from "./events-list";
 
-import { useState } from "react";
-import Link from "next/link";
+export default async function Events() {
+  const { user } = await validateRequest();
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  const acronym = user?.email
+    .split("@")[1]
+    ?.split(".")[0] as (typeof SCHOOLS)[number]["acronym"];
+  const school = SCHOOLS.find((school) => school.acronym === acronym)!;
 
-export default function Events() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const promise = api.event.allByUniversityName({
+    universityName: school.name,
+  });
 
-  const filteredEvents = events.filter((event) =>
-    event.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
-  return (
-    <>
-      <input
-        type="text"
-        placeholder="Search events"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="flex h-9 w-1/2 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-      />
-
-      {filteredEvents.length > 0 ? (
-        filteredEvents.map((event) => (
-          <Card
-            key={event.name}
-            className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
-          >
-            <Link href={"/event/" + event.id}>
-              <CardHeader>
-                <CardTitle>{event.name}</CardTitle>
-                <CardDescription>{event.description}</CardDescription>
-              </CardHeader>
-            </Link>
-          </Card>
-        ))
-      ) : (
-        <div className="w-[300px] lg:w-[600px]">No events found.</div>
-      )}
-    </>
-  );
+  return <EventsList universityName={school.name} promise={promise} />;
 }
-
-const events = [
-  {
-    name: "Event Name 1",
-    description: "Event Description 1",
-    id: 1,
-  },
-  {
-    name: "Event Name 2",
-    description: "Event Description 2",
-    id: 2,
-  },
-  {
-    name: "Event Name 3",
-    description: "Event Description 3",
-    id: 3,
-  },
-  {
-    name: "Event Name 4",
-    description: "Event Description 4",
-    id: 4,
-  },
-  {
-    name: "Event Name 5",
-    description: "Event Description 5",
-    id: 5,
-  },
-];
