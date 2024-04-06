@@ -56,7 +56,7 @@ export function SignInForm() {
             Don&apos;t have an account?
             <Link href="/sign-up" className="font-semibold">
               {" "}
-              Sign In
+              Sign Up
             </Link>
           </p>
         </form>
