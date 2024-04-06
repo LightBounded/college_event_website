@@ -11,6 +11,17 @@ import { events, universities } from "~/server/db/schema";
 import { CreateEventSchema, UpdateEventSchema } from "~/validators/events";
 
 export const event = createTRPCRouter({
+  byId: publicProcedure
+    .input(
+      z.object({
+        eventId: z.number(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.query.events.findFirst({
+        where: eq(events.id, input.eventId),
+      });
+    }),
   allByOrganizationId: publicProcedure
     .input(z.object({ organizationId: z.number() }))
     .query(async ({ input, ctx }) => {
