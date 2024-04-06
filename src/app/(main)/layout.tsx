@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
 import { validateRequest } from "~/server/auth/validate-request";
-import { Schools } from "./components/schools";
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +26,6 @@ async function Navigation() {
         >
           LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
-        <Schools />
       </div>
       {user ? (
         <form action={signOutAction}>
