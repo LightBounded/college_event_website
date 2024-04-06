@@ -121,5 +121,5 @@ export async function signInAction(_: unknown, formData: FormData) {
     sessionCookie.attributes,
   );
 
-  return redirect("/explore");
+  return redirect("/");
 }
