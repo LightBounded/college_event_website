@@ -39,28 +39,28 @@ export function OrganizationsList({
     <>
       <input
         type="text"
-        placeholder="Search events"
+        placeholder="Search organizations"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="flex h-9 w-1/2 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
       />
 
       {filteredEvents.length > 0 ? (
-        filteredEvents.map((event) => (
+        filteredEvents.map((org) => (
           <Card
-            key={event.name}
+            key={org.name}
             className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
           >
-            <Link href={"/event/" + event.id}>
+            <Link href={"/" + org.id}>
               <CardHeader>
-                <CardTitle>{event.name}</CardTitle>
-                <CardDescription>{event.description}</CardDescription>
+                <CardTitle>{org.name}</CardTitle>
+                <CardDescription>{org.description}</CardDescription>
               </CardHeader>
             </Link>
           </Card>
         ))
       ) : (
-        <div className="w-[300px] lg:w-[600px]">No events found.</div>
+        <div className="w-[300px] lg:w-[600px]">No organizations found.</div>
       )}
     </>
   );
