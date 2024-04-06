@@ -1,3 +1,5 @@
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
 import {
   createCallerFactory,
   createTRPCRouter,
@@ -32,3 +34,6 @@ export type AppRouter = typeof appRouter;
  *       ^? Post[]
  */
 export const createCaller = createCallerFactory(appRouter);
+
+export type RouterOutputs = inferRouterOutputs<typeof appRouter>;
+export type RouterInputs = inferRouterInputs<typeof appRouter>;
