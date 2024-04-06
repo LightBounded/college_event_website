@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 
 export function EventsList({
@@ -29,27 +30,24 @@ export function EventsList({
       initialData: eventsFromServer,
     },
   );
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
 
   const filteredEvents = allEvents.data.filter((event) =>
-    event.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    event.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
-    <>
-      <input
-        type="text"
-        placeholder="Search events"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="flex h-9 w-1/2 rounded-md border border-input bg-card px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    <div>
+      <Input
+        className="mb-2"
+        placeholder="Search for an event"
+        onChange={(e) => setSearch(e.target.value)}
       />
-
       {filteredEvents.length > 0 ? (
         filteredEvents.map((event) => (
           <Card
             key={event.name}
-            className="w-[300px] transition-transform hover:scale-x-105 hover:cursor-pointer lg:w-[600px]"
+            className="transition-transform hover:scale-105 hover:cursor-pointer"
           >
             <Link href={"/event/" + event.id}>
               <CardHeader>
@@ -60,8 +58,8 @@ export function EventsList({
           </Card>
         ))
       ) : (
-        <div className="w-[300px] lg:w-[600px]">No events found.</div>
+        <div>No events found.</div>
       )}
-    </>
+    </div>
   );
 }

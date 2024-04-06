@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations, sql } from "drizzle-orm";
-import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, int, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
 import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
 
@@ -65,6 +65,7 @@ export const universities = sqliteTable("university", {
   }),
   adminId: text("admin_id")
     .notNull()
+    .unique()
     .references(() => users.id),
   name: text("name").notNull(),
   domain: text("domain", {
@@ -133,17 +134,23 @@ export const organizationsRelations = relations(
   },
 );
 
-export const members = sqliteTable("member", {
-  id: int("id").notNull().primaryKey({
-    autoIncrement: true,
+export const members = sqliteTable(
+  "member",
+  {
+    id: int("id").notNull().primaryKey({
+      autoIncrement: true,
+    }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    organizationId: int("organization_id")
+      .notNull()
+      .references(() => organizations.id),
+  },
+  (table) => ({
+    unique: unique().on(table.userId, table.organizationId),
   }),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  organizationId: int("organization_id")
-    .notNull()
-    .references(() => organizations.id),
-});
+);
 
 export const membersRelations = relations(members, ({ one }) => {
   return {
@@ -174,7 +181,6 @@ export const events = sqliteTable("event", {
   date: text("date").notNull(),
   contactEmail: text("contact_email").notNull(),
   contactPhone: text("contact_phone").notNull(),
-  membersCount: int("members_count").notNull().default(0),
 });
 
 export const eventsRelations = relations(events, ({ one, many }) => {

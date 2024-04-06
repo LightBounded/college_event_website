@@ -13,6 +13,7 @@ import superjson from "superjson";
 import { z, ZodError } from "zod";
 
 import { type SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
+import { getSchoolFromEmail } from "~/lib/utils";
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
 import { members, universities } from "../db/schema";

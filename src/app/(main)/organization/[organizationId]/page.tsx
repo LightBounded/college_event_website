@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { api } from "~/trpc/server";
 
-export default async function page({
+export default async function Organization({
   params,
 }: {
   params: { organizationId: string };
@@ -9,13 +11,17 @@ export default async function page({
     organizationId: Number(params.organizationId),
   });
 
+  if (!organization) {
+    return redirect("/");
+  }
+
   return (
-    <main className="flex min-h-screen flex-row justify-center p-4">
+    <main className="mx-auto flex max-w-screen-sm p-4">
       <div className="flex flex-col gap-4 sm:w-[400px]">
         <h1 className="bg-gradient-to-r from-violet-600 to-indigo-100 bg-clip-text text-4xl font-semibold text-transparent">
           {organization?.name}
         </h1>
-        <h2>{organization?.description}</h2>
+        <p>{organization?.description}</p>
       </div>
     </main>
   );

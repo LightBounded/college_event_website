@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
+import { getSchoolFromEmail } from "~/lib/utils";
 import {
   members,
   organizations,
@@ -46,6 +47,18 @@ export const organization = createTRPCRouter({
     .input(CreateOrganizationSchema)
     .mutation(async ({ input: { membersEmails, ...newOrganization }, ctx }) => {
       await ctx.db.transaction(async (db) => {
+        // Check if all members are part of this university
+        if (
+          membersEmails.some(
+            (email) => getSchoolFromEmail(email).name !== ctx.university.name,
+          )
+        ) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid members provided",
+          });
+        }
+
         // Create organization
         const [insertedOrganization] = await db
           .insert(organizations)
@@ -67,6 +80,13 @@ export const organization = createTRPCRouter({
         const newMembers = await db.query.users.findMany({
           where: inArray(users.email, membersEmails),
         });
+
+        if (newMembers.length !== 3) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid members provided",
+          });
+        }
 
         // Insert members
         await db.insert(members).values(

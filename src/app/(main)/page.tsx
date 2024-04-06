@@ -1,42 +1,36 @@
 import { redirect } from "next/navigation";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { validateRequest } from "~/server/auth/validate-request";
-import Events from "./components/events";
-import Organizations from "./components/organizations";
+import { api } from "~/trpc/server";
+import { CreateOrganizationSheet } from "./_components/create-organization-sheet";
+import Events from "./_components/events";
+import Organizations from "./_components/organizations";
 
 export default async function Home() {
-  const { user } = await validateRequest();
+  const user = await api.user.current();
 
   if (!user) {
     return redirect("/sign-in");
   }
+
   return (
-    <main className="flex min-h-screen flex-row justify-center p-4">
-      <Tabs defaultValue="organizations" className="w-auto">
-        {/* content for when org tab is open */}
-        <TabsContent value="organizations" className="flex flex-col gap-4">
-          <div className="flex flex-row gap-8">
-            <TabsList>
-              <TabsTrigger value="organizations">Organizations</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-            </TabsList>
-          </div>
-          <div className="flex flex-col gap-4">
-            <Organizations />
-          </div>
+    <main className="mx-auto flex max-w-screen-sm p-4">
+      <Tabs defaultValue="organizations" className="w-full">
+        <div className="flex justify-between">
+          <TabsList>
+            <TabsTrigger value="organizations">Organizations</TabsTrigger>
+            <TabsTrigger value="events">Events</TabsTrigger>
+          </TabsList>
+          {user.administeredUniversity && (
+            <CreateOrganizationSheet university={user.administeredUniversity} />
+          )}
+        </div>
+
+        <TabsContent value="organizations">
+          <Organizations />
         </TabsContent>
-        {/* content for when events tab is open */}
-        <TabsContent value="events" className="flex flex-col gap-4">
-          <div className="flex flex-row gap-8">
-            <TabsList>
-              <TabsTrigger value="organizations">Organizations</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-            </TabsList>
-          </div>
-          <div className="flex flex-col gap-4">
-            <Events />
-          </div>
+        <TabsContent value="events">
+          <Events />
         </TabsContent>
       </Tabs>
     </main>

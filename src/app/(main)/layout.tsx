@@ -1,11 +1,22 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
+import { getSchoolFromEmail } from "~/lib/utils";
 import { validateRequest } from "~/server/auth/validate-request";
 
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { user } = await validateRequest();
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   return (
     <>
       <Navigation />
@@ -16,35 +27,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 async function Navigation() {
   const { user } = await validateRequest();
+  const { name } = getSchoolFromEmail(user!.email);
 
   return (
     <nav className="flex h-16 items-center justify-between gap-4 px-4">
       <div className="flex flex-row gap-4 text-xl font-semibold">
         <Link
           href="/"
-          className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent transition-all hover:scale-105 hover:text-foreground"
+          className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text text-xl font-semibold text-transparent transition-all hover:scale-105 "
         >
           LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
       </div>
+      <div>{name}</div>
       {user ? (
         <form action={signOutAction}>
-          <Button
-            size="sm"
-            className="transition-all hover:scale-105 hover:bg-foreground hover:text-secondary"
-            type="submit"
-          >
+          <Button size="sm" type="submit">
             Sign Out
           </Button>
         </form>
       ) : (
         <Link href="/sign-in">
-          <Button
-            size="sm"
-            className="transition-all hover:scale-105 hover:bg-foreground hover:text-secondary"
-          >
-            Sign In
-          </Button>
+          <Button size="sm">Sign In</Button>
         </Link>
       )}
     </nav>
