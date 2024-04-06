@@ -21,7 +21,12 @@ export function SignInForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
-        <CardTitle>LeCollegeEvents Sign In</CardTitle>
+        <CardTitle className="flex h-5 flex-row content-center justify-center gap-1">
+          <CardTitle className="flex flex-row bg-gradient-to-r from-violet-600 to-indigo-400 bg-clip-text font-semibold text-transparent">
+            LeCollegeEvents
+          </CardTitle>{" "}
+          Sign In
+        </CardTitle>
         <CardDescription>
           Sign in using your school email and password
         </CardDescription>
