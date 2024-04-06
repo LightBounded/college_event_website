@@ -1,8 +1,16 @@
+import { redirect } from "next/navigation";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { validateRequest } from "~/server/auth/validate-request";
 import Events from "./components/events";
 import Organizations from "./components/organizations";
 
 export default async function Home() {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    return redirect("/sign-in");
+  }
   return (
     <main className="flex min-h-screen flex-row justify-center p-4">
       <Tabs defaultValue="organizations" className="w-auto">
