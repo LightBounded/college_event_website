@@ -12,8 +12,7 @@ import { and, eq } from "drizzle-orm";
 import superjson from "superjson";
 import { z, ZodError } from "zod";
 
-import { type SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
-import { getSchoolFromEmail } from "~/lib/utils";
+import { getUniversityFromEmail } from "~/lib/utils";
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
 import { members, universities } from "../db/schema";
@@ -115,25 +114,18 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 });
 
 // User must be part of the university to use this procedure
-export const universityProcedure = protectedProcedure
-  .input(
-    z.object({
-      universityId: z.number(),
-    }),
-  )
-  .use(async ({ ctx, next, input }) => {
-    const universityDomain = ctx.user.email.split(
-      "@",
-    )[1] as (typeof SUPPORTED_SCHOOL_DOMAINS)[number];
+export const universityProcedure = protectedProcedure.use(
+  async ({ ctx, next }) => {
+    const school = getUniversityFromEmail(ctx.user.email);
 
     const university = await db.query.universities.findFirst({
-      where: eq(universities.id, input.universityId),
+      where: eq(universities.name, school.name),
     });
 
-    if (!university || university.domain !== universityDomain) {
+    if (!university) {
       throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "University not found",
+        code: "UNAUTHORIZED",
+        message: "Not a student of this university",
       });
     }
 
@@ -142,7 +134,8 @@ export const universityProcedure = protectedProcedure
         university,
       },
     });
-  });
+  },
+);
 
 // User must be an admin of university to use this procedure
 export const universityAdminProcedure = universityProcedure.use(

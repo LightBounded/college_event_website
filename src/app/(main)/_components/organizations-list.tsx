@@ -3,7 +3,7 @@
 import { use, useState } from "react";
 import Link from "next/link";
 
-import type { SCHOOLS } from "~/consts";
+import type { UNIVERSITIES } from "~/consts";
 import type { RouterOutputs } from "~/server/api/root";
 import {
   Card,
@@ -18,7 +18,7 @@ export function OrganizationsList({
   universityName,
   promise,
 }: {
-  universityName: (typeof SCHOOLS)[number]["name"];
+  universityName: (typeof UNIVERSITIES)[number]["name"];
   promise: Promise<RouterOutputs["organization"]["allByUniversityName"]>;
 }) {
   const organizationsFromServer = use(promise);

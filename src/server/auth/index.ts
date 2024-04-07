@@ -3,6 +3,7 @@ import { Lucia, TimeSpan } from "lucia";
 
 import type { User } from "../db/schema";
 import { env } from "~/env";
+import { getUniversityFromEmail } from "~/lib/utils";
 import { db } from "../db";
 import { sessions, users } from "../db/schema";
 
@@ -12,6 +13,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => ({
     id: attributes.id,
     email: attributes.email,
+    school: getUniversityFromEmail(attributes.email),
   }),
   sessionExpiresIn: new TimeSpan(30, "d"),
   sessionCookie: {

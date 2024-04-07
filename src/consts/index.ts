@@ -1,17 +1,4 @@
-export const SUPPORTED_SCHOOL_DOMAINS = [
-  "ucf.edu",
-  "uf.edu",
-  "fsu.edu",
-  "usf.edu",
-  "fiu.edu",
-  "famu.edu",
-  "unf.edu",
-  "uwf.edu",
-  "fgcu.edu",
-  "fau.edu",
-] as const;
-
-export const SCHOOLS = [
+export const UNIVERSITIES = [
   { acronym: "ucf", name: "University of Central Florida" },
   { acronym: "uf", name: "University of Florida" },
   { acronym: "fsu", name: "Florida State University" },

@@ -11,7 +11,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --check .",
+    "format": "prettier --check . --ignore-path .gitignore",
     "format:fix": "prettier --write .",
     "start": "next start"
   },

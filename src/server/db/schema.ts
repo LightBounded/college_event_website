@@ -4,8 +4,6 @@
 import { relations, sql } from "drizzle-orm";
 import { index, int, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
-import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
-
 // export const posts = sqliteTable(
 //   "post",
 //   {
@@ -36,14 +34,10 @@ export const users = sqliteTable(
 export const usersRelations = relations(users, ({ many, one }) => {
   return {
     organizations: many(organizations),
-    universities: many(universities),
     administeredUniversity: one(universities, {
       fields: [users.id],
       references: [universities.adminId],
-    }),
-    administeredOrganization: one(organizations, {
-      fields: [users.id],
-      references: [organizations.adminId],
+      relationName: "administered_university",
     }),
   };
 });
@@ -68,16 +62,8 @@ export const universities = sqliteTable("university", {
     .unique()
     .references(() => users.id),
   name: text("name").notNull(),
-  domain: text("domain", {
-    enum: SUPPORTED_SCHOOL_DOMAINS,
-  })
-    .notNull()
-    .unique(),
   description: text("description"),
-  studentsCount: int("students_count").notNull().default(0),
-  locationId: int("location_id")
-    .notNull()
-    .references(() => location.id),
+  location: text("location").notNull(),
 });
 
 export const universitiesRelations = relations(
@@ -93,15 +79,6 @@ export const universitiesRelations = relations(
   },
 );
 
-export const location = sqliteTable("location", {
-  id: int("id").notNull().primaryKey({
-    autoIncrement: true,
-  }),
-  name: text("name").notNull(),
-  longtitude: int("longtitude").notNull(),
-  latitude: int("latitude").notNull(),
-});
-
 export const organizations = sqliteTable("organization", {
   id: int("id").notNull().primaryKey({
     autoIncrement: true,
@@ -114,7 +91,6 @@ export const organizations = sqliteTable("organization", {
     .notNull()
     .references(() => universities.id),
   description: text("description").notNull(),
-  membersCount: int("members_count").notNull().default(0),
 });
 
 export const organizationsRelations = relations(
@@ -174,13 +150,9 @@ export const events = sqliteTable("event", {
     .references(() => organizations.id),
   name: text("name").notNull(),
   description: text("description"),
-  locationId: int("location_id")
-    .notNull()
-    .references(() => location.id),
+  location: text("location").notNull(),
   time: text("time").notNull(),
   date: text("date").notNull(),
-  contactEmail: text("contact_email").notNull(),
-  contactPhone: text("contact_phone").notNull(),
 });
 
 export const eventsRelations = relations(events, ({ one, many }) => {
@@ -188,10 +160,6 @@ export const eventsRelations = relations(events, ({ one, many }) => {
     organization: one(organizations, {
       fields: [events.organizationId],
       references: [organizations.id],
-    }),
-    location: one(location, {
-      fields: [events.locationId],
-      references: [location.id],
     }),
     comments: many(comments),
   };

@@ -15,8 +15,8 @@ export default async function Event({
 
   return (
     <main className="mx-auto flex max-w-screen-sm p-4">
-      <div className="flex flex-col gap-4">
-        <h1 className="bg-gradient-to-r from-violet-600 to-indigo-100 bg-clip-text text-4xl font-semibold text-transparent">
+      <div className="mb-8 flex flex-col">
+        <h1 className="mb-4 bg-gradient-to-r from-violet-600 to-indigo-100 bg-clip-text text-4xl font-semibold text-transparent">
           {event?.name}
         </h1>
         <p>{event?.description}</p>

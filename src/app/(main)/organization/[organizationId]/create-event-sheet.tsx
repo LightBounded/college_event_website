@@ -22,47 +22,58 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
+import { type RouterOutputs } from "~/server/api/root";
 import { api } from "~/trpc/react";
-import { CreateOrganizationSchema } from "~/validators/organization";
+import { CreateEventSchema } from "~/validators/events";
 
-export function CreateOrganizationSheet() {
+export function CreateEventSheet({
+  organization,
+}: {
+  organization: NonNullable<RouterOutputs["organization"]["byId"]>;
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button>Create Organization</Button>
+        <Button size="sm">Create Event</Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Create Organization</SheetTitle>
+          <SheetTitle>Create Event</SheetTitle>
           <SheetDescription>
-            Fill out the form below to create a new organization.
+            Fill out the form below to create a new event.
           </SheetDescription>
-          <CreateOrganizationForm />
+          <CreateEventForm organization={organization} />
         </SheetHeader>
       </SheetContent>
     </Sheet>
   );
 }
 
-export function CreateOrganizationForm() {
+export function CreateEventForm({
+  organization,
+}: {
+  organization: NonNullable<RouterOutputs["organization"]["byId"]>;
+}) {
   const utils = api.useUtils();
   const form = useForm({
-    schema: CreateOrganizationSchema,
+    schema: CreateEventSchema,
     defaultValues: {
       name: "",
       description: "",
-      membersEmails: ["", "", ""],
+      date: "",
+      time: "",
+      location: "",
     },
   });
 
-  const createOrganization = api.organization.create.useMutation({
+  const createEvent = api.event.create.useMutation({
     onSuccess: async () => {
-      await utils.organization.invalidate();
+      await utils.event.invalidate();
       form.reset();
-      toast("Organization created successfully");
+      toast("Event created successfully");
     },
     onError: () => {
-      toast("Failed to create organization");
+      toast("Failed to create event");
     },
   });
 
@@ -71,7 +82,10 @@ export function CreateOrganizationForm() {
       <form
         className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(async (values) => {
-          createOrganization.mutate(values);
+          createEvent.mutate({
+            ...values,
+            organizationId: organization.id,
+          });
         })}
       >
         <FormField
@@ -102,12 +116,12 @@ export function CreateOrganizationForm() {
         />
         <FormField
           control={form.control}
-          name="adminEmail"
+          name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Admin Email</FormLabel>
+              <FormLabel>Date</FormLabel>
               <FormControl>
-                <Input placeholder="Admin Email" {...field} />
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -115,12 +129,12 @@ export function CreateOrganizationForm() {
         />
         <FormField
           control={form.control}
-          name="membersEmails.0"
+          name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Member 1</FormLabel>
+              <FormLabel>Time</FormLabel>
               <FormControl>
-                <Input placeholder="Member 1 Email" {...field} />
+                <Input type="time" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,32 +142,19 @@ export function CreateOrganizationForm() {
         />
         <FormField
           control={form.control}
-          name="membersEmails.1"
+          name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Member 2</FormLabel>
+              <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="Member 2 Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="membersEmails.2"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Member 3</FormLabel>
-              <FormControl>
-                <Input placeholder="Member 3 Email" {...field} />
+                <Input placeholder="Location" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" className="mt-2">
-          Create Organization
+          Create Event
         </Button>
       </form>
     </Form>

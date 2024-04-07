@@ -8,8 +8,12 @@ export const user = createTRPCRouter({
     const user = await ctx.db.query.users.findFirst({
       where: eq(users.id, ctx.user.id),
       with: {
-        administeredOrganization: true,
         administeredUniversity: true,
+        organizations: {
+          with: {
+            admin: true,
+          },
+        },
       },
     });
 

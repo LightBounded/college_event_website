@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
 import { CreateOrganizationSheet } from "./_components/create-organization-sheet";
@@ -9,10 +7,6 @@ import Organizations from "./_components/organizations";
 export default async function Home() {
   const user = await api.user.current();
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
-
   return (
     <main className="mx-auto flex max-w-screen-sm p-4">
       <Tabs defaultValue="organizations" className="w-full">
@@ -21,9 +15,7 @@ export default async function Home() {
             <TabsTrigger value="organizations">Organizations</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
-          {user.administeredUniversity && (
-            <CreateOrganizationSheet university={user.administeredUniversity} />
-          )}
+          {user!.administeredUniversity && <CreateOrganizationSheet />}
         </div>
 
         <TabsContent value="organizations">

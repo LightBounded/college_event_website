@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 export const CreateOrganizationSchema = z.object({
-  name: z.string().min(1, "Name must be at least 1 character"),
-  description: z.string(),
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  adminEmail: z.string().email(),
   membersEmails: z
     .array(z.string().email())
     .length(
@@ -13,6 +14,6 @@ export const CreateOrganizationSchema = z.object({
 
 export const UpdateOrganizationSchema = z.object({
   organizationId: z.number(),
-  name: z.string().min(1, "Name must be at least 1 character"),
+  name: z.string().min(1, "Name is required"),
   description: z.string(),
 });

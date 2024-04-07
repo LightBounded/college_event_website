@@ -1,16 +1,14 @@
 import { z } from "zod";
 
-import { SUPPORTED_SCHOOL_DOMAINS } from "~/consts";
+import { UNIVERSITIES } from "~/consts";
 
 export const SignUpSchema = z.object({
   email: z
     .string()
     .email()
     .refine((email) => {
-      const domain = email.split(
-        "@",
-      )[1] as (typeof SUPPORTED_SCHOOL_DOMAINS)[number];
-      return SUPPORTED_SCHOOL_DOMAINS.includes(domain);
+      const domain = email.split("@")[1]?.split(".")[0];
+      return UNIVERSITIES.some((school) => school.acronym === domain);
     }, "Unsupported email domain"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });

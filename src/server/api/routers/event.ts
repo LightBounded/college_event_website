@@ -20,6 +20,14 @@ export const event = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       return ctx.db.query.events.findFirst({
         where: eq(events.id, input.eventId),
+        with: {
+          organization: true,
+          comments: {
+            with: {
+              user: true,
+            },
+          },
+        },
       });
     }),
   allByOrganizationId: publicProcedure
@@ -27,6 +35,9 @@ export const event = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       return ctx.db.query.events.findMany({
         where: eq(events.organizationId, input.organizationId),
+        with: {
+          organization: true,
+        },
       });
     }),
   allByUniversityName: publicProcedure
@@ -37,7 +48,11 @@ export const event = createTRPCRouter({
         with: {
           organizations: {
             with: {
-              events: true,
+              events: {
+                with: {
+                  organization: true,
+                },
+              },
             },
           },
         },
