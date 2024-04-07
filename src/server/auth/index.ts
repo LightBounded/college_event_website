@@ -13,7 +13,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => ({
     id: attributes.id,
     email: attributes.email,
-    school: getUniversityFromEmail(attributes.email),
+    university: getUniversityFromEmail(attributes.email),
   }),
   sessionExpiresIn: new TimeSpan(30, "d"),
   sessionCookie: {

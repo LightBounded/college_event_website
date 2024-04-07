@@ -53,12 +53,15 @@ export const organization = createTRPCRouter({
           const allMembersEmails = [...membersEmails, adminEmail];
 
           // Check if all members are part of this university
-          if (
-            allMembersEmails.some(
-              (email) =>
-                getUniversityFromEmail(email).name !== ctx.university.name,
-            )
-          ) {
+          const areValidMembers = allMembersEmails.every((e) => {
+            const university = getUniversityFromEmail(e);
+            if (university.name !== ctx.university.name) {
+              return false;
+            }
+            return true;
+          });
+
+          if (!areValidMembers) {
             throw new TRPCError({
               code: "BAD_REQUEST",
               message: "Invalid members provided",
@@ -87,7 +90,7 @@ export const organization = createTRPCRouter({
             where: inArray(users.email, allMembersEmails),
           });
 
-          if (newMembers.length !== 3) {
+          if (newMembers.length !== 4) {
             throw new TRPCError({
               code: "BAD_REQUEST",
               message: "Invalid members provided",

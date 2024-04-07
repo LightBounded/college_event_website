@@ -12,7 +12,6 @@ import { and, eq } from "drizzle-orm";
 import superjson from "superjson";
 import { z, ZodError } from "zod";
 
-import { getUniversityFromEmail } from "~/lib/utils";
 import { db } from "~/server/db";
 import { uncachedValidateRequest } from "../auth/validate-request";
 import { members, universities } from "../db/schema";
@@ -114,18 +113,28 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
 });
 
 // User must be part of the university to use this procedure
-export const universityProcedure = protectedProcedure.use(
-  async ({ ctx, next }) => {
-    const school = getUniversityFromEmail(ctx.user.email);
-
+export const universityProcedure = protectedProcedure
+  .input(
+    z.object({
+      universityId: z.number(),
+    }),
+  )
+  .use(async ({ ctx, next, input }) => {
     const university = await db.query.universities.findFirst({
-      where: eq(universities.name, school.name),
+      where: eq(universities.id, input.universityId),
     });
 
     if (!university) {
       throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "University not found",
+      });
+    }
+
+    if (ctx.user.university.name !== university.name) {
+      throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "Not a student of this university",
+        message: "Not a member of this university",
       });
     }
 
@@ -134,8 +143,7 @@ export const universityProcedure = protectedProcedure.use(
         university,
       },
     });
-  },
-);
+  });
 
 // User must be an admin of university to use this procedure
 export const universityAdminProcedure = universityProcedure.use(

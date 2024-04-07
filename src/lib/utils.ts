@@ -9,8 +9,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getUniversityFromEmail(email: string) {
-  const acronym = email.split("@")[1]?.split(".")[0];
+  const domain = email.split("@")[1];
+  if (!domain?.endsWith(".edu")) {
+    throw new Error("Invalid email");
+  }
 
+  const acronym = domain.split(".")[0];
   if (!acronym) {
     throw new Error("Invalid email");
   }

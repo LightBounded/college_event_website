@@ -6,10 +6,13 @@ export default async function Events() {
   const { user } = await validateRequest();
 
   const promise = api.organization.allByUniversityName({
-    universityName: user!.school.name,
+    universityName: user!.university.name,
   });
 
   return (
-    <OrganizationsList universityName={user!.school.name} promise={promise} />
+    <OrganizationsList
+      universityName={user!.university.name}
+      promise={promise}
+    />
   );
 }

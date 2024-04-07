@@ -15,7 +15,11 @@ export default async function Home() {
             <TabsTrigger value="organizations">Organizations</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
           </TabsList>
-          {user!.administeredUniversity && <CreateOrganizationSheet />}
+          {user!.administeredUniversity && (
+            <CreateOrganizationSheet
+              university={user!.administeredUniversity}
+            />
+          )}
         </div>
 
         <TabsContent value="organizations">

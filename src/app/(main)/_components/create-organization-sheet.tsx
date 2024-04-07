@@ -22,10 +22,17 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
+import { type RouterOutputs } from "~/server/api/root";
 import { api } from "~/trpc/react";
 import { CreateOrganizationSchema } from "~/validators/organization";
 
-export function CreateOrganizationSheet() {
+export function CreateOrganizationSheet({
+  university,
+}: {
+  university: NonNullable<
+    RouterOutputs["user"]["current"]
+  >["administeredUniversity"];
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -37,14 +44,20 @@ export function CreateOrganizationSheet() {
           <SheetDescription>
             Fill out the form below to create a new organization.
           </SheetDescription>
-          <CreateOrganizationForm />
+          <CreateOrganizationForm university={university} />
         </SheetHeader>
       </SheetContent>
     </Sheet>
   );
 }
 
-export function CreateOrganizationForm() {
+export function CreateOrganizationForm({
+  university,
+}: {
+  university: NonNullable<
+    RouterOutputs["user"]["current"]
+  >["administeredUniversity"];
+}) {
   const utils = api.useUtils();
   const form = useForm({
     schema: CreateOrganizationSchema,
@@ -52,6 +65,7 @@ export function CreateOrganizationForm() {
       name: "",
       description: "",
       membersEmails: ["", "", ""],
+      adminEmail: "",
     },
   });
 
@@ -71,7 +85,10 @@ export function CreateOrganizationForm() {
       <form
         className="flex flex-col gap-2"
         onSubmit={form.handleSubmit(async (values) => {
-          createOrganization.mutate(values);
+          createOrganization.mutate({
+            ...values,
+            universityId: university.id,
+          });
         })}
       >
         <FormField

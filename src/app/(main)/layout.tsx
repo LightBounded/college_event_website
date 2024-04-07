@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
 import { signOutAction } from "~/lib/actions";
-import { getUniversityFromEmail } from "~/lib/utils";
 import { validateRequest } from "~/server/auth/validate-request";
 
 export default async function Layout({
@@ -27,7 +26,6 @@ export default async function Layout({
 
 async function Navigation() {
   const { user } = await validateRequest();
-  const { name } = getUniversityFromEmail(user!.email);
 
   return (
     <nav className="flex h-16 items-center justify-between gap-4 px-4">
@@ -39,7 +37,7 @@ async function Navigation() {
           LeCollege<span className="text-secondary-foreground">Events</span>
         </Link>
       </div>
-      <div>{name}</div>
+      <div>{user!.university.name}</div>
       {user ? (
         <form action={signOutAction}>
           <Button size="sm" type="submit">
