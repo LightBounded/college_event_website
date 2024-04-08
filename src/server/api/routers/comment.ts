@@ -6,7 +6,6 @@ import { comments } from "~/server/db/schema";
 import { CreateCommentSchema, UpdateCommentSchema } from "~/validators/comment";
 import {
   createTRPCRouter,
-  organizationAdminProcedure,
   protectedProcedure,
   publicProcedure,
 } from "../trpc";
