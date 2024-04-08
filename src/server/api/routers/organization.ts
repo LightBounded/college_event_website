@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { getUniversityFromEmail } from "~/lib/utils";
@@ -15,6 +15,7 @@ import {
 } from "~/validators/organization";
 import {
   createTRPCRouter,
+  protectedProcedure,
   publicProcedure,
   universityAdminProcedure,
 } from "../trpc";
@@ -157,5 +158,54 @@ export const organization = createTRPCRouter({
           },
         },
       });
+    }),
+  join: protectedProcedure
+    .input(
+      z.object({
+        organizationId: z.number(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const organization = await ctx.db.query.organizations.findFirst({
+        where: eq(organizations.id, input.organizationId),
+        with: {
+          university: true,
+        },
+      });
+
+      if (!organization) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Organization not found",
+        });
+      }
+
+      if (ctx.user.university.name !== organization.university.name) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Organization not part of your university",
+        });
+      }
+
+      await ctx.db.insert(members).values({
+        userId: ctx.user.id,
+        organizationId: input.organizationId,
+      });
+    }),
+  leave: protectedProcedure
+    .input(
+      z.object({
+        organizationId: z.number(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db
+        .delete(members)
+        .where(
+          and(
+            eq(members.userId, ctx.user.id),
+            eq(members.organizationId, input.organizationId),
+          ),
+        );
     }),
 });

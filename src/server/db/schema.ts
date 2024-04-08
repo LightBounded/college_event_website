@@ -34,7 +34,7 @@ export const users = sqliteTable(
 
 export const usersRelations = relations(users, ({ many, one }) => {
   return {
-    organizations: many(organizations),
+    members: many(members),
     administeredUniversity: one(universities, {
       fields: [users.id],
       references: [universities.adminId],
@@ -88,12 +88,10 @@ export const organizations = sqliteTable("organization", {
     autoIncrement: true,
   }),
   name: text("name").notNull(),
-  adminId: text("admin_id")
-    .notNull()
-    .references(() => users.id, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
+  adminId: text("admin_id").references(() => users.id, {
+    onDelete: "set null",
+    onUpdate: "cascade",
+  }),
   universityId: int("university_id")
     .notNull()
     .references(() => universities.id, {
@@ -213,7 +211,7 @@ export const commentsRelations = relations(comments, ({ one }) => {
       fields: [comments.userId],
       references: [users.id],
     }),
-    event: one(events, {  
+    event: one(events, {
       fields: [comments.eventId],
       references: [events.id],
     }),

@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { toast } from "sonner";
+import { set } from "zod";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -28,6 +30,8 @@ export function CreateCommentForm({
 }: {
   event: NonNullable<RouterOutputs["event"]["byId"]>;
 }) {
+  const [open, setOpen] = useState(false);
+
   const utils = api.useUtils();
   const form = useForm({
     schema: CreateCommentSchema,
@@ -42,6 +46,7 @@ export function CreateCommentForm({
       await utils.comment.allByEventId.invalidate();
       form.reset();
       toast("Comment created successfully");
+      setOpen(false);
     },
     onError: () => {
       toast("Failed to create comment");
@@ -49,50 +54,72 @@ export function CreateCommentForm({
   });
 
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={form.handleSubmit(async (values) => {
-          createComment.mutate(values);
-        })}
-      >
-        <FormField
-          control={form.control}
-          name="rating"
-          render={({ field }) => (
-            <FormItem>
-              <Select onValueChange={(value) => field.onChange(Number(value))}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a rating to give this event" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="5">5</SelectItem>
-                  <SelectItem value="4">4</SelectItem>
-                  <SelectItem value="3">3</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="1">1</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="text"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea placeholder="Leave a comment" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Create comment</Button>
-      </form>
-    </Form>
+    <>
+      {!open ? (
+        <Button className="mb-4" onClick={() => setOpen(true)}>
+          Leave a comment
+        </Button>
+      ) : (
+        <Form {...form}>
+          <form
+            className="mb-4 flex flex-col gap-2"
+            onSubmit={form.handleSubmit(async (values) => {
+              createComment.mutate(values);
+            })}
+          >
+            <FormField
+              control={form.control}
+              name="rating"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a rating to give this event" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="5">5</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="1">1</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="text"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea placeholder="Leave a comment" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-2">
+              <Button type="submit">Create comment</Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  form.reset();
+                  setOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Form>
+      )}
+    </>
   );
 }

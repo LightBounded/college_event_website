@@ -24,10 +24,10 @@ export default async function Event({
         </h1>
         <p>{event.description}</p>
       </div>
-      <div className="mb-8">
-        <h1 className="mb-4 text-2xl font-bold">Comments</h1>
-        <CreateCommentForm event={event} />
-      </div>
+      <h1 className="mb-4 text-2xl font-bold">Comments</h1>
+      {user?.members.some(
+        (member) => member.organizationId === event.organizationId,
+      ) && <CreateCommentForm event={event} />}
       <Comments user={user} event={event} />
     </main>
   );

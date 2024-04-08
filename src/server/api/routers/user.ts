@@ -9,9 +9,9 @@ export const user = createTRPCRouter({
       where: eq(users.id, ctx.user.id),
       with: {
         administeredUniversity: true,
-        organizations: {
+        members: {
           with: {
-            admin: true,
+            organization: true,
           },
         },
       },
