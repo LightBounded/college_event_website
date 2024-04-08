@@ -21,9 +21,12 @@ export const comment = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       return ctx.db.query.comments.findMany({
         where: eq(comments.eventId, input.eventId),
+        with: {
+          user: true,
+        },
       });
     }),
-  delete: organizationAdminProcedure
+  delete: protectedProcedure
     .input(
       z.object({
         commentId: z.number(),
@@ -60,6 +63,7 @@ export const comment = createTRPCRouter({
         .update(comments)
         .set({
           text: input.text,
+          rating: input.rating,
         })
         .where(eq(comments.id, input.commentId));
     }),

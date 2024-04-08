@@ -27,15 +27,13 @@ export default async function Organization({
         </h1>
         <p>{organization.description}</p>
       </div>
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Events</h1>
-          {user?.organizations.some(
-            (org) => org.id === organization.id && org.admin,
-          ) && <CreateEventSheet organization={organization} />}
-        </div>
-        <OrganizationEventsList organization={organization} />
+      <div className="mb-4 flex items-center justify-between">
+        <div className="text-2xl font-bold">Events</div>
+        {user?.organizations.some(
+          (org) => org.id === organization.id && org.admin,
+        ) && <CreateEventSheet organization={organization} />}
       </div>
+      <OrganizationEventsList organization={organization} />
     </main>
   );
 }

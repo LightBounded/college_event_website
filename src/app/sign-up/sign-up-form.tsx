@@ -55,7 +55,7 @@ export function SignUpForm() {
             )}
           </div>
           <Button className="mt-2" type="submit">
-            Submit
+            Sign Up
           </Button>
           <p className="font-regular mt-2 text-center text-sm">
             Already have an account?

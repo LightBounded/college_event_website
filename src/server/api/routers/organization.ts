@@ -68,12 +68,24 @@ export const organization = createTRPCRouter({
             });
           }
 
+          // Get admin with the provided email
+          const admin = await db.query.users.findFirst({
+            where: eq(users.email, adminEmail),
+          });
+
+          if (!admin) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Invalid admin provided",
+            });
+          }
+
           // Create organization
           const [insertedOrganization] = await db
             .insert(organizations)
             .values({
               ...newOrganization,
-              adminId: ctx.user.id,
+              adminId: admin.id,
               universityId: ctx.university.id,
             })
             .returning();

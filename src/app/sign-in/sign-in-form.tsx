@@ -55,7 +55,7 @@ export function SignInForm() {
             )}
           </div>
           <Button className="mt-2" type="submit">
-            Submit
+            Sign In
           </Button>
           <p className="font-regular mt-2 text-center text-sm">
             Don&apos;t have an account?

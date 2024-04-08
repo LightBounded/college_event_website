@@ -1,6 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
+import { on } from "events";
 import { relations, sql } from "drizzle-orm";
 import { index, int, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
@@ -49,7 +50,10 @@ export const sessions = sqliteTable("session", {
   id: text("id").notNull().primaryKey(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   expiresAt: int("expires_at").notNull(),
 });
 
@@ -86,10 +90,16 @@ export const organizations = sqliteTable("organization", {
   name: text("name").notNull(),
   adminId: text("admin_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   universityId: int("university_id")
     .notNull()
-    .references(() => universities.id),
+    .references(() => universities.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   description: text("description").notNull(),
 });
 
@@ -118,10 +128,16 @@ export const members = sqliteTable(
     }),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
     organizationId: int("organization_id")
       .notNull()
-      .references(() => organizations.id),
+      .references(() => organizations.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
   },
   (table) => ({
     unique: unique().on(table.userId, table.organizationId),
@@ -147,7 +163,10 @@ export const events = sqliteTable("event", {
   }),
   organizationId: int("organization_id")
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizations.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   name: text("name").notNull(),
   description: text("description"),
   location: text("location").notNull(),
@@ -171,11 +190,18 @@ export const comments = sqliteTable("comment", {
   }),
   eventId: int("event_id")
     .notNull()
-    .references(() => events.id),
+    .references(() => events.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   text: text("text").notNull(),
+  rating: int("rating").notNull(),
   time: text("time")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
@@ -187,37 +213,8 @@ export const commentsRelations = relations(comments, ({ one }) => {
       fields: [comments.userId],
       references: [users.id],
     }),
-    event: one(events, {
+    event: one(events, {  
       fields: [comments.eventId],
-      references: [events.id],
-    }),
-  };
-});
-
-export const ratings = sqliteTable("rating", {
-  id: int("id").notNull().primaryKey({
-    autoIncrement: true,
-  }),
-  eventId: int("event_id")
-    .notNull()
-    .references(() => events.id),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
-  value: int("value").notNull(),
-  time: text("time")
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const ratingsRelations = relations(ratings, ({ one }) => {
-  return {
-    user: one(users, {
-      fields: [ratings.userId],
-      references: [users.id],
-    }),
-    event: one(events, {
-      fields: [ratings.eventId],
       references: [events.id],
     }),
   };
